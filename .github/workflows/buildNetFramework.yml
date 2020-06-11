@@ -1,0 +1,29 @@
+name: Build Net Full Framework
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  job_1:
+   name: Build
+   runs-on: [windows-latest]
+   steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+    
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.2
+    
+    - name: Restore NuGet packages
+      run: nuget restore ExemploGithubActionsNetFramework.sln
+
+    - name: Build the Solution
+      run: msbuild ExemploGithubActionsNetFramework.sln /p:Configuration=Debug /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:DisableAllVSGeneratedMSDeployParameter=true /p:SkipInvalidConfigurations=true 
+
+        
+  
