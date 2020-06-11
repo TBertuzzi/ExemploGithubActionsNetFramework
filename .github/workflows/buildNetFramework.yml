@@ -23,7 +23,24 @@ jobs:
       run: nuget restore ExemploGithubActionsNetFramework.sln
 
     - name: Build the Solution
-      run: msbuild ExemploGithubActionsNetFramework.sln /p:Configuration=Debug /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:DisableAllVSGeneratedMSDeployParameter=true /p:SkipInvalidConfigurations=true 
+      run: msbuild ExemploGithubActionsNetFramework.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:DisableAllVSGeneratedMSDeployParameter=true /p:SkipInvalidConfigurations=true 
 
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: exemploNetFrameworkArtifact
+        path: D:\a\ExemploGithubActionsNetFramework\ExemploGithubActionsNetFramework\ExemploGithubActionsNetFramework\obj\Release\Package\ExemploGithubActionsNetFramework.zip
+        
+  job_2:  
+    name: Deploy
+    needs: job_1
+    runs-on: [windows-latest] #aqui voce pode definir sua maquina self-hosted. Estou utilizando uma VM apenas para demonstração
+    steps:
+      - name: Download SegdocArtifact
+        uses: actions/download-artifact@v2
+        with:
+          name: exemploNetFrameworkArtifact
+          
+        # Após o Download você pode implementar scripts de instalação e etc
         
   
